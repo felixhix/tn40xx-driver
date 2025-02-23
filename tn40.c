@@ -441,7 +441,7 @@ static enum PHY_TYPE bdx_phy_init(struct bdx_priv *priv)
 
 	phy_id = bdx_mdio_scan_phy_id(priv);	/* set phy_mdio_port */
 
-	if (!priv->phy_mdio_port)
+	if (!phy_id)
 		return PHY_TYPE_NA;	/* No PHY detected on MDIO bus. */
 
 	/* register the PHY-specific callbacks */
@@ -460,7 +460,7 @@ static enum PHY_TYPE bdx_phy_init(struct bdx_priv *priv)
 
 	bdx_mdio_set_speed(priv->pBdxRegs, priv->phy_ops.mdio_speed);
 
-	if (priv->phy_ops.mdio_reset(priv, 1, priv->phy_type))
+	if (priv->phy_ops.mdio_reset(priv, priv->phy_mdio_port, priv->phy_type))
 		return PHY_TYPE_NA;
 
 	return phy_type;
