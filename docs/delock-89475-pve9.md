@@ -46,7 +46,23 @@ uses the current Kbuild `ccflags-y` variable. The latter is required so the
 selected `PHY_TLK10232` feature define is present in the compiled module;
 Linux 7 no longer honors the driver's old `EXTRA_CFLAGS` assignment here.
 
-The module has not yet been installed or loaded on the host.
+## Runtime result
+
+On `2026-09-07`, the signed module was loaded successfully after enrolling the
+host's DKMS Machine Owner Key. The driver reported:
+
+- `PHY_TLK10232` enabled
+- SVID PHY type `7`
+- MDIO address `6`
+- PHY ID `40005100`
+- `Link Up 10G`
+
+The link initially toggled while coming up, then remained at 10 Gb/s full
+duplex without further carrier changes during a 30-second observation window.
+Receive counters increased without input errors.
+
+The module is loaded manually for this runtime test. It has not yet replaced
+the in-tree driver through DKMS, so the change does not persist across reboot.
 
 ## Validation checklist
 
