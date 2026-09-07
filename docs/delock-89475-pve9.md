@@ -32,9 +32,18 @@ Proxmox host.
 
 Further changes should remain separate commits:
 
-1. Linux 7.x / Proxmox VE 9 build compatibility, if required.
+1. Linux 7.x / Proxmox VE 9 compatibility cleanup.
 2. Short-frame TX accounting, after isolated review and testing.
 3. DKMS packaging and installation documentation.
+
+## Build result
+
+The TI-PHY-only configuration (`TL=YES`) builds successfully against the
+Proxmox kernel headers for `7.0.14-15-pve`. No Linux 7 API port was required.
+The compatibility cleanup on this branch only removes duplicate `MIN` and
+`MAX` definitions that otherwise produce compiler warnings with Linux 7.
+
+The module has not yet been installed or loaded on the host.
 
 ## Validation checklist
 
