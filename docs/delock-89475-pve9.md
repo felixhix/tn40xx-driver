@@ -64,6 +64,41 @@ Receive counters increased without input errors.
 The module is loaded manually for this runtime test. It has not yet replaced
 the in-tree driver through DKMS, so the change does not persist across reboot.
 
+## Network validation
+
+The adapter was connected to an Ubiquiti USW Pro 24 PoE SFP+ port configured
+for 10 Gb/s full duplex. The switch and the driver agreed on link speed and
+duplex, and the switch reported no port errors or dropped frames.
+
+An isolated, temporary host address was used for the following tests:
+
+- 1,000 regular ICMP packets: no loss
+- 1,000 full-size 1,500-byte packets with DF set: no loss
+- 50,000 small ICMP packets: no loss or TX-level warning
+- sustained TCP transmit through a 1 Gb/s peer: about 939 Mb/s
+- sustained TCP receive through a 1 Gb/s peer: about 771 Mb/s
+- simultaneous TCP traffic: about 932 Mb/s TX and 748 Mb/s RX
+
+The 1 Gb/s peer was the bottleneck in the TCP tests. A second 10 Gb/s host is
+still required to measure full line-rate performance. During all tests the
+driver reported no input, alignment, DFE, interrupt-full, PCI, watchdog, or
+kernel errors.
+
+## Known limitations and follow-up
+
+- The driver exposes one RX/TX channel and one MSI interrupt. Actual 10 Gb/s
+  scaling must be measured with a suitable peer.
+- SFP module EEPROM and diagnostics are not exposed through `ethtool -m`.
+- Pause-frame and EEE configuration are not exposed through ethtool.
+- An extended `W=1` build succeeds but reports missing-prototype warnings in
+  the legacy PHY glue and one unused local variable in the RX path.
+- The previously proposed short-frame TX accounting change was not included:
+  50,000 small packets did not reproduce the historical warning.
+- On an unconfigured interface, IPv6 router advertisements may create a global
+  address and default route when the link is brought up. Disable RA/autoconf or
+  configure the interface explicitly before leaving it active on a production
+  network.
+
 ## Validation checklist
 
 - Build against the exact running Proxmox kernel headers.
