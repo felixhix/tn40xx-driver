@@ -94,16 +94,16 @@ ifeq ($(MUSTANG),YES)
 endif
 
 ifeq ($(EEE), YES)
-	EXTRA_CFLAGS += -D_EEE_
+	ccflags-y += -D_EEE_
 endif
 #
 # No selected PHYs default to Jumbo driver
 #
 ifndef OPT_PHYS
 	DRV_OBJS+= $(JUMBO_OBJS)
-	EXTRA_CFLAGS += $(JUMBO_PHYS)	
+	ccflags-y += $(JUMBO_PHYS)
 else
-	EXTRA_CFLAGS += $(OPT_PHYS)	
+	ccflags-y += $(OPT_PHYS)
 endif
 
 obj-m += $(DRV_NAME).o
@@ -185,4 +185,3 @@ uninstall:
 	rm -f $(INSTDIR)/$(DRV_NAME).ko 
 	test -f $(PM_DIR)/$(DRV_NAME) && rm $(PM_DIR)/$(DRV_NAME) || true
 	depmod $(KVERSION)
-

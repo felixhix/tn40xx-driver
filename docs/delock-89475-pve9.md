@@ -41,7 +41,10 @@ Further changes should remain separate commits:
 The TI-PHY-only configuration (`TL=YES`) builds successfully against the
 Proxmox kernel headers for `7.0.14-15-pve`. No Linux 7 API port was required.
 The compatibility cleanup on this branch only removes duplicate `MIN` and
-`MAX` definitions that otherwise produce compiler warnings with Linux 7.
+`MAX` definitions that otherwise produce compiler warnings with Linux 7 and
+uses the current Kbuild `ccflags-y` variable. The latter is required so the
+selected `PHY_TLK10232` feature define is present in the compiled module;
+Linux 7 no longer honors the driver's old `EXTRA_CFLAGS` assignment here.
 
 The module has not yet been installed or loaded on the host.
 
